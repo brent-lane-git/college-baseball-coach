@@ -21,6 +21,10 @@ const HomePage: React.FC = () => {
           Browse Teams
         </Link>
         
+        <Link to="/players" className="menu-button" style={{ textDecoration: 'none', display: 'block' }}>
+          Player Generation
+        </Link>
+        
         <Link to="/league-manager" className="menu-button" style={{ textDecoration: 'none', display: 'block' }}>
           League Manager
         </Link>
