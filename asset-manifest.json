@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/college-baseball-coach/static/css/main.cc4edc4c.css",
-    "main.js": "/college-baseball-coach/static/js/main.f7db6b87.js",
-    "static/js/453.76ae5b5c.chunk.js": "/college-baseball-coach/static/js/453.76ae5b5c.chunk.js",
-    "index.html": "/college-baseball-coach/index.html",
-    "main.cc4edc4c.css.map": "/college-baseball-coach/static/css/main.cc4edc4c.css.map",
-    "main.f7db6b87.js.map": "/college-baseball-coach/static/js/main.f7db6b87.js.map",
-    "453.76ae5b5c.chunk.js.map": "/college-baseball-coach/static/js/453.76ae5b5c.chunk.js.map"
+    "main.css": "./static/css/main.cc4edc4c.css",
+    "main.js": "./static/js/main.04b83082.js",
+    "static/js/453.76ae5b5c.chunk.js": "./static/js/453.76ae5b5c.chunk.js",
+    "index.html": "./index.html",
+    "main.cc4edc4c.css.map": "./static/css/main.cc4edc4c.css.map",
+    "main.04b83082.js.map": "./static/js/main.04b83082.js.map",
+    "453.76ae5b5c.chunk.js.map": "./static/js/453.76ae5b5c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.cc4edc4c.css",
-    "static/js/main.f7db6b87.js"
+    "static/js/main.04b83082.js"
   ]
 }
