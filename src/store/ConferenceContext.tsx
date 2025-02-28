@@ -12,6 +12,7 @@ interface ConferenceContextType {
   addConference: (conference: Conference) => void;
   updateConference: (conference: Conference) => void;
   deleteConference: (id: number) => void;
+  resetConferencesToDefault: () => void;
 }
 
 // Create the context
@@ -27,6 +28,7 @@ export const ConferenceProvider: React.FC<ConferenceProviderProps> = ({ children
   const [conferences, setConferences] = useState<Conference[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [originalConferences, setOriginalConferences] = useState<Conference[]>([]);
 
   // Load conferences when the provider mounts
   useEffect(() => {
@@ -34,9 +36,28 @@ export const ConferenceProvider: React.FC<ConferenceProviderProps> = ({ children
       try {
         setLoading(true);
         console.log('Attempting to load conferences...');
-        const loadedConferences = await conferenceService.loadConferences();
-        console.log('Conferences loaded:', loadedConferences.length);
-        setConferences(loadedConferences);
+        
+        // First check if there are conferences in localStorage
+        const localConferences = localStorage.getItem('customConferences');
+        
+        if (localConferences) {
+          // If localStorage has conferences, use those
+          console.log('Found conferences in localStorage. Using stored conferences.');
+          const parsedConferences = JSON.parse(localConferences);
+          setConferences(parsedConferences);
+          
+          // Still load the original conferences from the database file for potential reset
+          const originalConferencesData = await conferenceService.loadConferences();
+          setOriginalConferences(originalConferencesData);
+        } else {
+          // If no localStorage conferences, load from database file
+          console.log('No conferences found in localStorage. Loading from database file.');
+          const loadedConferences = await conferenceService.loadConferences();
+          console.log('Conferences loaded:', loadedConferences.length);
+          setConferences(loadedConferences);
+          setOriginalConferences(loadedConferences);
+        }
+        
         setError(null);
       } catch (err) {
         console.error('Conference loading error:', err);
@@ -93,6 +114,14 @@ export const ConferenceProvider: React.FC<ConferenceProviderProps> = ({ children
     });
   };
 
+  // Reset conferences to default (original database values)
+  const resetConferencesToDefault = (): void => {
+    // Reset to original conferences
+    setConferences(originalConferences);
+    // Remove from localStorage
+    localStorage.removeItem('customConferences');
+  };
+
   // Context value
   const value = {
     conferences,
@@ -102,7 +131,8 @@ export const ConferenceProvider: React.FC<ConferenceProviderProps> = ({ children
     getConferenceByName,
     addConference,
     updateConference,
-    deleteConference
+    deleteConference,
+    resetConferencesToDefault
   };
 
   return <ConferenceContext.Provider value={value}>{children}</ConferenceContext.Provider>;

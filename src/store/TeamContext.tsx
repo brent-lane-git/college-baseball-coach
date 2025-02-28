@@ -14,6 +14,7 @@ interface TeamContextType {
   addTeam: (team: Team) => void;
   updateTeam: (team: Team) => void;
   deleteTeam: (id: number) => void;
+  resetTeamsToDefault: () => void;
 }
 
 // Create the context
@@ -29,6 +30,7 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
   const [teams, setTeams] = useState<Team[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [originalTeams, setOriginalTeams] = useState<Team[]>([]);
 
   // Load teams when the provider mounts
   useEffect(() => {
@@ -36,10 +38,29 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
       try {
         setLoading(true);
         console.log('Attempting to load teams in TeamContext...');
-        const loadedTeams = await teamService.loadTeams();
-        console.log('Teams loaded in TeamContext. Count:', loadedTeams.length);
-        console.log('First team:', loadedTeams[0]);
-        setTeams(loadedTeams);
+        
+        // First check if there are teams in localStorage
+        const localTeams = localStorage.getItem('customTeams');
+        
+        if (localTeams) {
+          // If localStorage has teams, use those
+          console.log('Found teams in localStorage. Using stored teams.');
+          const parsedTeams = JSON.parse(localTeams);
+          setTeams(parsedTeams);
+          
+          // Still load the original teams from the database file for potential reset
+          const originalTeamsData = await teamService.loadTeams();
+          setOriginalTeams(originalTeamsData);
+        } else {
+          // If no localStorage teams, load from database file
+          console.log('No teams found in localStorage. Loading from database file.');
+          const loadedTeams = await teamService.loadTeams();
+          console.log('Teams loaded in TeamContext. Count:', loadedTeams.length);
+          console.log('First team:', loadedTeams[0]);
+          setTeams(loadedTeams);
+          setOriginalTeams(loadedTeams);
+        }
+        
         setError(null);
       } catch (err) {
         console.error('Team loading error:', err);
@@ -109,6 +130,14 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
     });
   };
 
+  // Reset teams to default (original database values)
+  const resetTeamsToDefault = (): void => {
+    // Reset to original teams
+    setTeams(originalTeams);
+    // Remove from localStorage
+    localStorage.removeItem('customTeams');
+  };
+
   // Context value
   const value = {
     teams,
@@ -120,7 +149,8 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
     getTopTeamsByPrestige,
     addTeam,
     updateTeam,
-    deleteTeam
+    deleteTeam,
+    resetTeamsToDefault
   };
 
   return <TeamContext.Provider value={value}>{children}</TeamContext.Provider>;

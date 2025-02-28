@@ -18,8 +18,8 @@ enum ManageMode {
 
 const LeagueManagerPage: React.FC = () => {
   const navigate = useNavigate();
-  const { teams, addTeam, updateTeam, deleteTeam } = useTeams();
-  const { conferences, addConference, updateConference, deleteConference } = useConferences();
+  const { teams, addTeam, updateTeam, deleteTeam, resetTeamsToDefault } = useTeams();
+  const { conferences, addConference, updateConference, deleteConference, resetConferencesToDefault } = useConferences();
   
   const [mode, setMode] = useState<ManageMode>(ManageMode.DASHBOARD);
   const [selectedTeam, setSelectedTeam] = useState<Team | undefined>(undefined);
@@ -130,6 +130,16 @@ const LeagueManagerPage: React.FC = () => {
     setMode(ManageMode.DASHBOARD);
     setSelectedTeam(undefined);
     setSelectedConference(undefined);
+  };
+
+  // Reset to default
+  const handleResetToDefault = () => {
+    if (window.confirm('Are you sure you want to reset all teams and conferences to their default values? This will delete all custom changes you have made.')) {
+      resetTeamsToDefault();
+      resetConferencesToDefault();
+      setSuccessMessage('All teams and conferences have been reset to their default values.');
+      setTimeout(() => setSuccessMessage(null), 3000);
+    }
   };
 
   // Render functions
@@ -294,6 +304,16 @@ const LeagueManagerPage: React.FC = () => {
   const renderDashboard = () => {
     return (
       <div className="manager-dashboard">
+        <div className="manager-actions">
+          <button 
+            className="reset-button" 
+            onClick={handleResetToDefault}
+            title="Reset all teams and conferences to their original database values"
+          >
+            Reset to Default
+          </button>
+        </div>
+        
         <div className="tab-navigation">
           <button 
             className={`tab-button ${activeTab === 'teams' ? 'active' : ''}`} 
