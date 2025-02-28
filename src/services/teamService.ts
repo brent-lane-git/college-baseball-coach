@@ -17,10 +17,46 @@ class TeamService {
     try {
       // Fetch the JSON file from the public folder
       console.log('Fetching teams database file...');
-      const response = await fetch('./teams-database.json');
       
-      if (!response.ok) {
-        throw new Error(`Failed to load teams: ${response.status} ${response.statusText}`);
+      // Try multiple potential paths
+      const paths = [
+        './teams-database.json',
+        '/teams-database.json',
+        '/college-baseball-coach/teams-database.json',
+        'teams-database.json'
+      ];
+      
+      let response;
+      let success = false;
+      
+      // Try each path in order
+      for (const path of paths) {
+        try {
+          console.log(`Trying to load from: ${path}`);
+          response = await fetch(path);
+          
+          if (!response.ok) {
+            console.log(`Path ${path} failed with status: ${response.status}`);
+            continue;
+          }
+          
+          // Check content type
+          const contentType = response.headers.get('content-type');
+          if (!contentType || !contentType.includes('application/json')) {
+            console.warn(`Path ${path} returned non-JSON content: ${contentType}`);
+            continue;
+          }
+          
+          console.log(`Successfully loaded from path: ${path}`);
+          success = true;
+          break;
+        } catch (e) {
+          console.warn(`Failed to load from path: ${path}`, e);
+        }
+      }
+      
+      if (!success || !response) {
+        throw new Error('Failed to load teams from any path');
       }
       
       console.log('Database file fetched, parsing JSON...');
@@ -50,7 +86,9 @@ class TeamService {
       return this.teams;
     } catch (error) {
       console.error('Error loading teams database:', error);
-      throw error;
+      
+      // Return empty array instead of throwing to prevent app from crashing
+      return [];
     }
   }
 

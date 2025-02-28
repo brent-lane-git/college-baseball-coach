@@ -44,27 +44,57 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
         const localTeams = localStorage.getItem('customTeams');
         
         if (localTeams) {
-          // If localStorage has teams, use those
-          console.log('Found teams in localStorage. Using stored teams.');
-          const parsedTeams = JSON.parse(localTeams);
-          setTeams(parsedTeams);
-          
-          // Still load the original teams from the database file for potential reset
-          const originalTeamsData = await teamService.loadTeams();
-          setOriginalTeams(originalTeamsData);
+          try {
+            // If localStorage has teams, use those
+            console.log('Found teams in localStorage. Using stored teams.');
+            const parsedTeams = JSON.parse(localTeams);
+            setTeams(parsedTeams);
+            
+            // Still load the original teams from the database file for potential reset
+            const originalTeamsData = await teamService.loadTeams();
+            if (originalTeamsData.length > 0) {
+              setOriginalTeams(originalTeamsData);
+            } else {
+              console.warn('Could not load original teams data for reset');
+            }
+          } catch (parseError) {
+            console.error('Error parsing local storage teams:', parseError);
+            localStorage.removeItem('customTeams'); // Remove invalid data
+            
+            // Load from database as fallback
+            const loadedTeams = await teamService.loadTeams();
+            if (loadedTeams.length > 0) {
+              setTeams(loadedTeams);
+              setOriginalTeams(loadedTeams);
+            } else {
+              // Initialize with empty array if all loading fails
+              setTeams([]);
+              setOriginalTeams([]);
+              setError('Failed to load teams. Please try refreshing the page.');
+            }
+          }
         } else {
           // If no localStorage teams, load from database file
           console.log('No teams found in localStorage. Loading from database file.');
           const loadedTeams = await teamService.loadTeams();
-          console.log('Teams loaded in TeamContext. Count:', loadedTeams.length);
-          console.log('First team:', loadedTeams[0]);
-          setTeams(loadedTeams);
-          setOriginalTeams(loadedTeams);
+          if (loadedTeams.length > 0) {
+            console.log('Teams loaded in TeamContext. Count:', loadedTeams.length);
+            console.log('First team:', loadedTeams[0]);
+            setTeams(loadedTeams);
+            setOriginalTeams(loadedTeams);
+          } else {
+            // Initialize with empty array if loading fails
+            setTeams([]);
+            setOriginalTeams([]);
+            setError('Failed to load teams. Please try refreshing the page.');
+          }
         }
         
         setError(null);
       } catch (err) {
         console.error('Team loading error:', err);
+        setTeams([]);
+        setOriginalTeams([]);
         setError('Failed to load teams database. Please check the console for details.');
       } finally {
         setLoading(false);

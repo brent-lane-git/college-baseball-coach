@@ -42,26 +42,56 @@ export const ConferenceProvider: React.FC<ConferenceProviderProps> = ({ children
         const localConferences = localStorage.getItem('customConferences');
         
         if (localConferences) {
-          // If localStorage has conferences, use those
-          console.log('Found conferences in localStorage. Using stored conferences.');
-          const parsedConferences = JSON.parse(localConferences);
-          setConferences(parsedConferences);
-          
-          // Still load the original conferences from the database file for potential reset
-          const originalConferencesData = await conferenceService.loadConferences();
-          setOriginalConferences(originalConferencesData);
+          try {
+            // If localStorage has conferences, use those
+            console.log('Found conferences in localStorage. Using stored conferences.');
+            const parsedConferences = JSON.parse(localConferences);
+            setConferences(parsedConferences);
+            
+            // Still load the original conferences from the database file for potential reset
+            const originalConferencesData = await conferenceService.loadConferences();
+            if (originalConferencesData.length > 0) {
+              setOriginalConferences(originalConferencesData);
+            } else {
+              console.warn('Could not load original conferences data for reset');
+            }
+          } catch (parseError) {
+            console.error('Error parsing local storage conferences:', parseError);
+            localStorage.removeItem('customConferences'); // Remove invalid data
+            
+            // Load from database as fallback
+            const loadedConferences = await conferenceService.loadConferences();
+            if (loadedConferences.length > 0) {
+              setConferences(loadedConferences);
+              setOriginalConferences(loadedConferences);
+            } else {
+              // Initialize with empty array if all loading fails
+              setConferences([]);
+              setOriginalConferences([]);
+              setError('Failed to load conferences. Please try refreshing the page.');
+            }
+          }
         } else {
           // If no localStorage conferences, load from database file
           console.log('No conferences found in localStorage. Loading from database file.');
           const loadedConferences = await conferenceService.loadConferences();
-          console.log('Conferences loaded:', loadedConferences.length);
-          setConferences(loadedConferences);
-          setOriginalConferences(loadedConferences);
+          if (loadedConferences.length > 0) {
+            console.log('Conferences loaded:', loadedConferences.length);
+            setConferences(loadedConferences);
+            setOriginalConferences(loadedConferences);
+          } else {
+            // Initialize with empty array if loading fails
+            setConferences([]);
+            setOriginalConferences([]);
+            setError('Failed to load conferences. Please try refreshing the page.');
+          }
         }
         
         setError(null);
       } catch (err) {
         console.error('Conference loading error:', err);
+        setConferences([]);
+        setOriginalConferences([]);
         setError('Failed to load conferences database. Please check the console for details.');
       } finally {
         setLoading(false);

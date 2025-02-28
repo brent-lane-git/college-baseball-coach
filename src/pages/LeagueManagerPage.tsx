@@ -1,3 +1,5 @@
+// LeagueManagerPage.tsx with added import/export functionality
+
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Team } from '../models/team.model';

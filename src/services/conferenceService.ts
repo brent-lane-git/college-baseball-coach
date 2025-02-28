@@ -17,15 +17,57 @@ class ConferenceService {
     try {
       // Fetch the JSON file from the public folder
       console.log('Fetching conferences database file...');
-      const response = await fetch('./conferences-database.json');
       
-      if (!response.ok) {
-        throw new Error(`Failed to load conferences: ${response.status} ${response.statusText}`);
+      // Try multiple potential paths
+      const paths = [
+        './conferences-database.json',
+        '/conferences-database.json',
+        '/college-baseball-coach/conferences-database.json',
+        'conferences-database.json'
+      ];
+      
+      let response;
+      let success = false;
+      
+      // Try each path in order
+      for (const path of paths) {
+        try {
+          console.log(`Trying to load from: ${path}`);
+          response = await fetch(path);
+          
+          if (!response.ok) {
+            console.log(`Path ${path} failed with status: ${response.status}`);
+            continue;
+          }
+          
+          // Check content type
+          const contentType = response.headers.get('content-type');
+          if (!contentType || !contentType.includes('application/json')) {
+            console.warn(`Path ${path} returned non-JSON content: ${contentType}`);
+            continue;
+          }
+          
+          console.log(`Successfully loaded from path: ${path}`);
+          success = true;
+          break;
+        } catch (e) {
+          console.warn(`Failed to load from path: ${path}`, e);
+        }
+      }
+      
+      if (!success || !response) {
+        throw new Error('Failed to load conferences from any path');
       }
       
       console.log('Database file fetched, parsing JSON...');
       const data = await response.json();
-      console.log('JSON parsed:', data);
+      console.log('JSON data structure:', Object.keys(data));
+      
+      if (!data.conferences) {
+        console.error('Missing conferences array in the JSON data');
+        console.log('Full JSON data:', data);
+        throw new Error('Invalid JSON structure: missing conferences array');
+      }
       
       // Store the conferences in memory
       this.conferences = data.conferences || [];
@@ -35,7 +77,9 @@ class ConferenceService {
       return this.conferences;
     } catch (error) {
       console.error('Error loading conferences database:', error);
-      throw error;
+      
+      // Return empty array instead of throwing to prevent app from crashing
+      return [];
     }
   }
 
