@@ -1,0 +1,102 @@
+{
+  "conferences": [
+    {
+      "id": 0,
+      "name": "Southeastern Conference",
+      "abbreviation": "SEC",
+      "prestige": 95,
+      "color": "3C1361"
+    },
+    {
+      "id": 1,
+      "name": "Atlantic Coast Conference",
+      "abbreviation": "ACC",
+      "prestige": 90,
+      "color": "FF7700"
+    },
+    {
+      "id": 2,
+      "name": "Big Ten Conference",
+      "abbreviation": "Big Ten",
+      "prestige": 85,
+      "color": "0088CE"
+    },
+    {
+      "id": 3,
+      "name": "Big 12 Conference",
+      "abbreviation": "Big 12",
+      "prestige": 85,
+      "color": "D11242"
+    },
+    {
+      "id": 4,
+      "name": "Pac-12 Conference",
+      "abbreviation": "Pac-12",
+      "prestige": 80,
+      "color": "004B91"
+    },
+    {
+      "id": 5,
+      "name": "American Athletic Conference",
+      "abbreviation": "AAC",
+      "prestige": 70,
+      "color": "00337F"
+    },
+    {
+      "id": 6,
+      "name": "Mountain West Conference",
+      "abbreviation": "MW",
+      "prestige": 65,
+      "color": "8B9EB8"
+    },
+    {
+      "id": 7,
+      "name": "Conference USA",
+      "abbreviation": "C-USA",
+      "prestige": 60,
+      "color": "0077B6"
+    },
+    {
+      "id": 8,
+      "name": "Mid-American Conference",
+      "abbreviation": "MAC",
+      "prestige": 55,
+      "color": "00263A"
+    },
+    {
+      "id": 9,
+      "name": "Sun Belt Conference",
+      "abbreviation": "Sun Belt",
+      "prestige": 50,
+      "color": "00205B"
+    },
+    {
+      "id": 10,
+      "name": "Big East Conference",
+      "abbreviation": "Big East",
+      "prestige": 65,
+      "color": "005596"
+    },
+    {
+      "id": 11,
+      "name": "West Coast Conference",
+      "abbreviation": "WCC",
+      "prestige": 60,
+      "color": "1E4C80"
+    },
+    {
+      "id": 12,
+      "name": "Ivy League",
+      "abbreviation": "Ivy",
+      "prestige": 55,
+      "color": "036635"
+    },
+    {
+      "id": 13,
+      "name": "Metro Atlantic Athletic Conference",
+      "abbreviation": "MAAC",
+      "prestige": 40,
+      "color": "006747"
+    }
+  ]
+}

@@ -1,0 +1,207 @@
+{
+    "conferences": [
+        {
+            "id": 0,
+            "name": "Conference 0",
+            "abbreviation": "C0",
+            "prestige": 44,
+            "color": "00FFFF"
+        },
+        {
+            "id": 1,
+            "name": "Conference 1",
+            "abbreviation": "C1",
+            "prestige": 45,
+            "color": "888888"
+        },
+        {
+            "id": 2,
+            "name": "Conference 2",
+            "abbreviation": "C2",
+            "prestige": 61,
+            "color": "FF00FF"
+        },
+        {
+            "id": 3,
+            "name": "Conference 3",
+            "abbreviation": "C3",
+            "prestige": 63,
+            "color": "FFFF00"
+        },
+        {
+            "id": 4,
+            "name": "Conference 4",
+            "abbreviation": "C4",
+            "prestige": 80,
+            "color": "FFFFFF"
+        },
+        {
+            "id": 5,
+            "name": "Conference 5",
+            "abbreviation": "C5",
+            "prestige": 73,
+            "color": "FF00FF"
+        },
+        {
+            "id": 6,
+            "name": "Conference 6",
+            "abbreviation": "C6",
+            "prestige": 79,
+            "color": "888888"
+        },
+        {
+            "id": 7,
+            "name": "Conference 7",
+            "abbreviation": "C7",
+            "prestige": 58,
+            "color": "0000FF"
+        },
+        {
+            "id": 8,
+            "name": "Conference 8",
+            "abbreviation": "C8",
+            "prestige": 40,
+            "color": "0000FF"
+        },
+        {
+            "id": 9,
+            "name": "Conference 9",
+            "abbreviation": "C9",
+            "prestige": 89,
+            "color": "FFFFFF"
+        },
+        {
+            "id": 10,
+            "name": "Conference 10",
+            "abbreviation": "C10",
+            "prestige": 47,
+            "color": "FF00FF"
+        },
+        {
+            "id": 11,
+            "name": "Conference 11",
+            "abbreviation": "C11",
+            "prestige": 95,
+            "color": "FFFFFF"
+        },
+        {
+            "id": 12,
+            "name": "Conference 12",
+            "abbreviation": "C12",
+            "prestige": 84,
+            "color": "00FFFF"
+        },
+        {
+            "id": 13,
+            "name": "Conference 13",
+            "abbreviation": "C13",
+            "prestige": 70,
+            "color": "FFFF00"
+        },
+        {
+            "id": 14,
+            "name": "Conference 14",
+            "abbreviation": "C14",
+            "prestige": 60,
+            "color": "444444"
+        },
+        {
+            "id": 15,
+            "name": "Conference 15",
+            "abbreviation": "C15",
+            "prestige": 85,
+            "color": "FF0000"
+        },
+        {
+            "id": 16,
+            "name": "Conference 16",
+            "abbreviation": "C16",
+            "prestige": 53,
+            "color": "444444"
+        },
+        {
+            "id": 17,
+            "name": "Conference 17",
+            "abbreviation": "C17",
+            "prestige": 88,
+            "color": "FFFFFF"
+        },
+        {
+            "id": 18,
+            "name": "Conference 18",
+            "abbreviation": "C18",
+            "prestige": 83,
+            "color": "00FF00"
+        },
+        {
+            "id": 19,
+            "name": "Conference 19",
+            "abbreviation": "C19",
+            "prestige": 48,
+            "color": "0000FF"
+        },
+        {
+            "id": 20,
+            "name": "Conference 20",
+            "abbreviation": "C20",
+            "prestige": 80,
+            "color": "000000"
+        },
+        {
+            "id": 21,
+            "name": "Conference 21",
+            "abbreviation": "C21",
+            "prestige": 72,
+            "color": "FFFFFF"
+        },
+        {
+            "id": 22,
+            "name": "Conference 22",
+            "abbreviation": "C22",
+            "prestige": 78,
+            "color": "FFFFFF"
+        },
+        {
+            "id": 23,
+            "name": "Conference 23",
+            "abbreviation": "C23",
+            "prestige": 68,
+            "color": "000000"
+        },
+        {
+            "id": 24,
+            "name": "Conference 24",
+            "abbreviation": "C24",
+            "prestige": 90,
+            "color": "FFFF00"
+        },
+        {
+            "id": 25,
+            "name": "Conference 25",
+            "abbreviation": "C25",
+            "prestige": 95,
+            "color": "FFFFFF"
+        },
+        {
+            "id": 26,
+            "name": "Conference 26",
+            "abbreviation": "C26",
+            "prestige": 50,
+            "color": "00FFFF"
+        },
+        {
+            "id": 27,
+            "name": "Conference 27",
+            "abbreviation": "C27",
+            "prestige": 65,
+            "color": "00FF00"
+        },
+        {
+            "id": 28,
+            "name": "Conference 28",
+            "abbreviation": "C28",
+            "prestige": 67,
+            "color": "FFFF00"
+        }
+    ]
+}
