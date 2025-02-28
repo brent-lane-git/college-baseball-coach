@@ -13,6 +13,7 @@ interface ConferenceContextType {
   updateConference: (conference: Conference) => void;
   deleteConference: (id: number) => void;
   resetConferencesToDefault: () => void;
+  setAllConferences: (conferences: Conference[]) => void; // New function
 }
 
 // Create the context
@@ -122,6 +123,13 @@ export const ConferenceProvider: React.FC<ConferenceProviderProps> = ({ children
     localStorage.removeItem('customConferences');
   };
 
+  // Set all conferences (for import functionality)
+  const setAllConferences = (newConferences: Conference[]): void => {
+    setConferences(newConferences);
+    // Save to local storage for persistence
+    localStorage.setItem('customConferences', JSON.stringify(newConferences));
+  };
+
   // Context value
   const value = {
     conferences,
@@ -132,7 +140,8 @@ export const ConferenceProvider: React.FC<ConferenceProviderProps> = ({ children
     addConference,
     updateConference,
     deleteConference,
-    resetConferencesToDefault
+    resetConferencesToDefault,
+    setAllConferences
   };
 
   return <ConferenceContext.Provider value={value}>{children}</ConferenceContext.Provider>;

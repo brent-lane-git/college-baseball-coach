@@ -15,6 +15,7 @@ interface TeamContextType {
   updateTeam: (team: Team) => void;
   deleteTeam: (id: number) => void;
   resetTeamsToDefault: () => void;
+  setAllTeams: (teams: Team[]) => void; // New function
 }
 
 // Create the context
@@ -138,6 +139,13 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
     localStorage.removeItem('customTeams');
   };
 
+  // Set all teams (for import functionality)
+  const setAllTeams = (newTeams: Team[]): void => {
+    setTeams(newTeams);
+    // Save to local storage for persistence
+    localStorage.setItem('customTeams', JSON.stringify(newTeams));
+  };
+
   // Context value
   const value = {
     teams,
@@ -150,7 +158,8 @@ export const TeamProvider: React.FC<TeamProviderProps> = ({ children }) => {
     addTeam,
     updateTeam,
     deleteTeam,
-    resetTeamsToDefault
+    resetTeamsToDefault,
+    setAllTeams
   };
 
   return <TeamContext.Provider value={value}>{children}</TeamContext.Provider>;

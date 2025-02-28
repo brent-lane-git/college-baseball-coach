@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Team } from '../models/team.model';
 import { Conference } from '../models/conference.model';
@@ -16,16 +16,23 @@ enum ManageMode {
   CREATE_CONFERENCE = 'create_conference'
 }
 
+// Interface for the combined league data
+interface LeagueData {
+  teams: Team[];
+  conferences: Conference[];
+}
+
 const LeagueManagerPage: React.FC = () => {
   const navigate = useNavigate();
-  const { teams, addTeam, updateTeam, deleteTeam, resetTeamsToDefault } = useTeams();
-  const { conferences, addConference, updateConference, deleteConference, resetConferencesToDefault } = useConferences();
+  const { teams, addTeam, updateTeam, deleteTeam, resetTeamsToDefault, setAllTeams } = useTeams();
+  const { conferences, addConference, updateConference, deleteConference, resetConferencesToDefault, setAllConferences } = useConferences();
   
   const [mode, setMode] = useState<ManageMode>(ManageMode.DASHBOARD);
   const [selectedTeam, setSelectedTeam] = useState<Team | undefined>(undefined);
   const [selectedConference, setSelectedConference] = useState<Conference | undefined>(undefined);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'teams' | 'conferences'>('teams');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Get conference name by ID
   const getConferenceName = (conferenceID: number): string => {
@@ -140,6 +147,96 @@ const LeagueManagerPage: React.FC = () => {
       setSuccessMessage('All teams and conferences have been reset to their default values.');
       setTimeout(() => setSuccessMessage(null), 3000);
     }
+  };
+
+  // Export league data
+  const handleExportLeague = () => {
+    // Create the combined data structure
+    const leagueData: LeagueData = {
+      teams,
+      conferences
+    };
+    
+    // Convert to JSON
+    const jsonData = JSON.stringify(leagueData, null, 2);
+    
+    // Create a blob
+    const blob = new Blob([jsonData], { type: 'application/json' });
+    
+    // Create a date string for the filename
+    const date = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    
+    // Create a download link
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `college-baseball-league-${date}.json`;
+    
+    // Trigger download
+    document.body.appendChild(link);
+    link.click();
+    
+    // Clean up
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    setSuccessMessage('League data exported successfully!');
+    setTimeout(() => setSuccessMessage(null), 3000);
+  };
+
+  // Import league data
+  const handleImportLeague = () => {
+    // Open file dialog
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  // Handle file selection
+  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+    
+    const file = files[0];
+    if (file.type !== 'application/json' && !file.name.endsWith('.json')) {
+      alert('Please select a JSON file.');
+      return;
+    }
+    
+    // Read the file
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const content = e.target?.result as string;
+        const data = JSON.parse(content) as LeagueData;
+        
+        // Validate the file structure
+        if (!data.teams || !Array.isArray(data.teams) || !data.conferences || !Array.isArray(data.conferences)) {
+          alert('Invalid league file format. The file must contain both teams and conferences arrays.');
+          return;
+        }
+        
+        // Confirm import
+        if (window.confirm(`This will replace your current league with ${data.teams.length} teams and ${data.conferences.length} conferences. Continue?`)) {
+          // Update the state
+          setAllTeams(data.teams);
+          setAllConferences(data.conferences);
+          
+          setSuccessMessage('League data imported successfully!');
+          setTimeout(() => setSuccessMessage(null), 3000);
+        }
+      } catch (error) {
+        console.error('Error parsing JSON file:', error);
+        alert('Error reading the file. Please make sure it is a valid JSON file.');
+      }
+      
+      // Reset the file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    };
+    
+    reader.readAsText(file);
   };
 
   // Render functions
@@ -305,13 +402,38 @@ const LeagueManagerPage: React.FC = () => {
     return (
       <div className="manager-dashboard">
         <div className="manager-actions">
-          <button 
-            className="reset-button" 
-            onClick={handleResetToDefault}
-            title="Reset all teams and conferences to their original database values"
-          >
-            Reset to Default
-          </button>
+          {/* Hidden file input for import */}
+          <input 
+            type="file" 
+            ref={fileInputRef} 
+            style={{ display: 'none' }} 
+            accept=".json,application/json" 
+            onChange={handleFileSelect} 
+          />
+          
+          <div className="action-group">
+            <button 
+              className="import-button" 
+              onClick={handleImportLeague}
+              title="Import a league file"
+            >
+              Import League
+            </button>
+            <button 
+              className="export-button" 
+              onClick={handleExportLeague}
+              title="Export current league to a file"
+            >
+              Export League
+            </button>
+            <button 
+              className="reset-button" 
+              onClick={handleResetToDefault}
+              title="Reset all teams and conferences to their original database values"
+            >
+              Reset to Default
+            </button>
+          </div>
         </div>
         
         <div className="tab-navigation">
