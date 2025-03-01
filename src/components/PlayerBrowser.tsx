@@ -8,6 +8,7 @@ import {
   PITCH_NAME_MAP 
 } from '../models/player.model';
 import playerGenerationService from '../services/playerGenerationService';
+import './PlayerBrowser.css';
 
 const PlayerBrowser: React.FC = () => {
   const [players, setPlayers] = useState<Player[]>([]);

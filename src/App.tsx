@@ -8,27 +8,32 @@ import PlayerBrowserPage from './pages/PlayerBrowserPage';
 import TestPage from './pages/TestPage';
 import { TeamProvider } from './store/TeamContext';
 import { ConferenceProvider } from './store/ConferenceContext';
+import { PlayerProvider } from './store/PlayerContext';
 import './App.css';
 
 const App: React.FC = () => {
   return (
     <ConferenceProvider>
       <TeamProvider>
-        <Router>
-          <div className="App">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/new-game" element={<NewGamePage />} />
-              <Route path="/teams" element={<TeamBrowserPage />} />
-              <Route path="/league-manager" element={<LeagueManagerPage />} />
-              <Route path="/players" element={<PlayerBrowserPage />} />
-              <Route path="/test" element={<TestPage />} />
-            </Routes>
-          </div>
-        </Router>
+        <PlayerProvider>
+          <Router>
+            <div className="App">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/new-game" element={<NewGamePage />} />
+                <Route path="/teams" element={<TeamBrowserPage />} />
+                <Route path="/league-manager" element={<LeagueManagerPage />} />
+                <Route path="/players" element={<PlayerBrowserPage />} />
+                <Route path="/test" element={<TestPage />} />
+              </Routes>
+            </div>
+          </Router>
+        </PlayerProvider>
       </TeamProvider>
     </ConferenceProvider>
   );
 };
+
+export default App;
 
 export default App;
